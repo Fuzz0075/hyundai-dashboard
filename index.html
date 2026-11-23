@@ -259,13 +259,13 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
   </section>
 
   <div id="app" hidden>
-    <div class="bar"><span id="upd">Загрузка данных…</span><span class="acts"><button type="button" class="theme-btn" data-theme-toggle aria-label="Сменить тему" title="Светлая / тёмная тема"><svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button><button type="button" id="reload">Обновить</button><button type="button" id="logout">Выйти</button></span></div>
+    <div class="bar"><span id="upd"></span><span class="acts"><button type="button" class="theme-btn" data-theme-toggle aria-label="Сменить тему" title="Светлая / тёмная тема"><svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button><button type="button" id="reload">Обновить</button><button type="button" id="logout">Выйти</button></span></div>
 <div class="hd">
   <header class="hd-head" id="top">
     <div>
       <div class="hd-eyebrow">Hyundai · Samarkand</div>
       <h1 class="hd-title">Маркетинговый дашборд</h1>
-      <p class="hd-sub" id="takeaway">Период <span data-draw="val" class="dash-skeleton" data-source="kpi" data-field="from" data-row="0" data-fmt="dm">—</span> — <span data-draw="val" class="dash-skeleton" data-source="kpi" data-field="to" data-row="0" data-fmt="dm">—</span>: <b data-draw="val" class="dash-skeleton" data-source="kpi" data-field="rl" data-row="0">—</b> обращений, <b data-draw="val" class="dash-skeleton" data-source="kpi" data-field="sales" data-row="0">—</b> продаж, стоимость продажи <b data-draw="val" class="dash-skeleton" data-source="kpi" data-field="cac" data-row="0" data-fmt="usd">—</b>. Данные из Google-таблицы «Hundai Dashboard».</p>
+      <p class="hd-sub" id="takeaway">Период <span data-draw="val" class="dash-skeleton" data-source="kpi" data-field="from" data-row="0" data-fmt="dm">—</span> — <span data-draw="val" class="dash-skeleton" data-source="kpi" data-field="to" data-row="0" data-fmt="dm">—</span>: <b data-draw="val" class="dash-skeleton" data-source="kpi" data-field="rl" data-row="0">—</b> обращений, <b data-draw="val" class="dash-skeleton" data-source="kpi" data-field="sales" data-row="0">—</b> продаж, стоимость продажи <b data-draw="val" class="dash-skeleton" data-source="kpi" data-field="cac" data-row="0" data-fmt="usd">—</b>.</p>
     </div>
   </header>
   <div class="hd-accent" aria-hidden="true"></div>
@@ -1265,7 +1265,7 @@ dash.calc('slots', {
   const KEY = 'hd_dash_key';
   const fmtTime = (iso) => { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); };
   async function load(key, fromLogin) {
-    $('upd').textContent = 'Загрузка данных…';
+    $('upd').textContent = '';
     if (!fromLogin) dash._state('loading');
     let json;
     try {
@@ -1284,7 +1284,7 @@ dash.calc('slots', {
     if (!json || json.error) { $('upd').textContent = 'Ошибка таблицы: ' + ((json && json.error) || 'нет ответа'); dash._state('error'); return false; }
     $('login').hidden = true; $('app').hidden = false;
     dash._ingest(json);
-    $('upd').textContent = 'Данные из Google-таблицы · загружено ' + fmtTime(json.updated || new Date().toISOString());
+    $('upd').textContent = '';
     return true;
   }
   $('login-form').addEventListener('submit', async (e) => {
