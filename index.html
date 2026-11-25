@@ -428,6 +428,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
       <div class="hd-eyebrow">Hyundai · Samarkand</div>
       <h1 class="hd-title">Маркетинговый дашборд</h1>
       <p class="hd-sub" id="takeaway">Период <span data-draw="val" class="dash-skeleton" data-source="kpi" data-field="from" data-row="0" data-fmt="dm">—</span> — <span data-draw="val" class="dash-skeleton" data-source="kpi" data-field="to" data-row="0" data-fmt="dm">—</span>: <b data-draw="val" class="dash-skeleton" data-source="kpi" data-field="rl" data-row="0">—</b> обращений, <b data-draw="val" class="dash-skeleton" data-source="kpi" data-field="sales" data-row="0">—</b> продаж, стоимость продажи <b data-draw="val" class="dash-skeleton" data-source="kpi" data-field="cac" data-row="0" data-fmt="usd">—</b>.</p>
+      <p class="hd-sub" id="takeaway-uz" hidden>Период <span data-draw="val" data-source="kpi" data-field="from" data-row="0" data-fmt="dm">—</span> — <span data-draw="val" data-source="kpi" data-field="to" data-row="0" data-fmt="dm">—</span>: <b data-draw="val" data-source="proc_dist" data-field="rl" data-row="0">—</b> рабочих листов от дистрибьютора, <b data-draw="val" data-source="proc_dist" data-field="visited" data-row="0">—</b> визитов, <b data-draw="val" data-source="proc_dist" data-field="sales" data-row="0">—</b> продаж. Расходов у этой воронки нет.</p>
     </div>
   </header>
   <div class="hd-accent" aria-hidden="true"></div>
@@ -1634,6 +1635,8 @@ dash.calc('slots', {
   const show = (tab) => {
     document.querySelectorAll('[data-tab-page]').forEach((s) => { s.hidden = s.dataset.tabPage !== tab; });
     document.querySelectorAll('#tabs [data-tab]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tab === tab)));
+    const ta = document.getElementById('takeaway'), tu = document.getElementById('takeaway-uz');
+    if (ta && tu) { ta.hidden = tab === 'uzbekistan'; tu.hidden = tab !== 'uzbekistan'; }
   };
   document.querySelectorAll('#tabs [data-tab]').forEach((b) => b.addEventListener('click', () => { show(b.dataset.tab); dash.setLink(b.dataset.tab); }));
   const start = (location.hash || '').slice(1);
