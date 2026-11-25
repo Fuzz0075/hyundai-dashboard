@@ -552,11 +552,11 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
   <!-- ================= КОМАНДА ================= -->
   <section class="hd-page" id="team" data-tab-page="team" hidden>
     <div class="hd-card" id="processing">
-      <div class="hd-card-head"><div><h3 class="hd-card-title">Обработка рабочих листов</h3><p class="hd-card-sub">По истории AutoCRM: «РЛ создан» → «взят в работу» → «предварительно отклонён». Учитывает все фильтры.</p></div></div>
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Обработка рабочих листов</h3><p class="hd-card-sub">По истории AutoCRM: «РЛ создан» → «взят в работу» → «предварительно отклонён». Время до взятия — только рабочие часы 9:00–20:00 (каждый день): лид, пришедший ночью, считается с 9:00. Учитывает все фильтры.</p></div></div>
       <div class="hd-strip">
-        <div><div class="hd-strip-label">Ср. время до взятия</div><div class="hd-strip-value"><span data-draw="val" data-source="processing" data-field="avg_h" data-row="0" data-fmt="h1">—</span></div><div class="hd-strip-note">медиана <span data-draw="val" data-source="processing" data-field="median_min" data-row="0" data-fmt="min">—</span></div></div>
-        <div><div class="hd-strip-label">Взяты за 15 мин</div><div class="hd-strip-value is-bad"><span data-draw="val" data-source="processing" data-field="fast_pct" data-row="0" data-fmt="pct">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="processing" data-field="fast" data-row="0">—</span> из <span data-draw="val" data-source="processing" data-field="taken" data-row="0">—</span> взятых · цель 80%</div></div>
-        <div><div class="hd-strip-label">Взяты позже 24 ч</div><div class="hd-strip-value"><span data-draw="val" data-source="processing" data-field="late" data-row="0">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="processing" data-field="late_pct" data-row="0" data-fmt="pct">—</span> от взятых</div></div>
+        <div><div class="hd-strip-label">Ср. время до взятия (рабочее)</div><div class="hd-strip-value"><span data-draw="val" data-source="processing" data-field="avg_h" data-row="0" data-fmt="h1">—</span></div><div class="hd-strip-note">медиана <span data-draw="val" data-source="processing" data-field="median_min" data-row="0" data-fmt="min">—</span> · без учёта графика <span data-draw="val" data-source="processing" data-field="avg_h_cal" data-row="0" data-fmt="h1">—</span></div></div>
+        <div><div class="hd-strip-label">Взяты за 15 рабочих мин</div><div class="hd-strip-value is-bad"><span data-draw="val" data-source="processing" data-field="fast_pct" data-row="0" data-fmt="pct">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="processing" data-field="fast" data-row="0">—</span> из <span data-draw="val" data-source="processing" data-field="taken" data-row="0">—</span> взятых · цель 80%</div></div>
+        <div><div class="hd-strip-label">Взяты позже рабочего дня</div><div class="hd-strip-value"><span data-draw="val" data-source="processing" data-field="late" data-row="0">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="processing" data-field="late_pct" data-row="0" data-fmt="pct">—</span> от взятых</div></div>
         <div><div class="hd-strip-label">Не брали в работу</div><div class="hd-strip-value is-bad"><span data-draw="val" data-source="processing" data-field="not_taken" data-row="0">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="processing" data-field="not_taken_pct" data-row="0" data-fmt="pct">—</span> от РЛ</div></div>
         <div><div class="hd-strip-label">Предв. отказ</div><div class="hd-strip-value"><span data-draw="val" data-source="processing" data-field="refused_pct" data-row="0" data-fmt="pct">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="processing" data-field="refused" data-row="0">—</span> из <span data-draw="val" data-source="processing" data-field="rl" data-row="0">—</span> РЛ</div></div>
       </div>
@@ -571,9 +571,9 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
     </div>
 
     <div class="hd-card" id="operators">
-      <div class="hd-card-head"><div><h3 class="hd-card-title">Операторы колл-центра — лиды Meta</h3><p class="hd-card-sub">Кто обрабатывал лиды Meta и с каким итогом. Медиана — минут от создания лида до взятия.</p></div></div>
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Операторы колл-центра — лиды Meta</h3><p class="hd-card-sub">Кто обрабатывал лиды Meta и с каким итогом. Медиана — рабочих минут (9:00–20:00) от создания лида до взятия.</p></div></div>
       <div class="hd-scroll"><table class="hd-table" data-source="operators" data-row-key="operator">
-        <thead><tr><th data-field="operator">Оператор</th><th class="r" data-field="leads">Лиды</th><th class="r" data-field="rl">→ РЛ</th><th class="r" data-field="rl_pct" data-fmt="pct" data-bad="lt:0.3">% в РЛ</th><th class="r" data-field="not_left">Не оставлял</th><th class="r" data-field="off">Номер откл.</th><th class="r" data-field="refused">Отказ соед.</th><th class="r" data-field="median_min" data-bad="gt:60">Медиана, мин</th></tr></thead>
+        <thead><tr><th data-field="operator">Оператор</th><th class="r" data-field="leads">Лиды</th><th class="r" data-field="rl">→ РЛ</th><th class="r" data-field="rl_pct" data-fmt="pct" data-bad="lt:0.3">% в РЛ</th><th class="r" data-field="not_left">Не оставлял</th><th class="r" data-field="off">Номер откл.</th><th class="r" data-field="refused">Отказ соед.</th><th class="r" data-field="median_min" data-bad="gt:60">Медиана, раб. мин</th><th class="r" data-field="median_min_cal">Медиана, всего мин</th></tr></thead>
         <tbody data-draw="tbody"></tbody>
       </table></div>
     </div>
@@ -595,9 +595,9 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
     </div>
 
     <div class="hd-card" id="slots">
-      <div class="hd-card-head"><div><h3 class="hd-card-title">Когда создаются рабочие листы и как быстро их берут</h3><p class="hd-card-sub">По времени создания РЛ: проседает ли обработка вечером, ночью и в выходные.</p></div></div>
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Когда создаются рабочие листы и как быстро их берут</h3><p class="hd-card-sub">По времени создания РЛ. Рабочие минуты — с учётом графика 9:00–20:00; «всего» — сколько клиент реально ждал.</p></div></div>
       <div class="hd-scroll"><table class="hd-table" data-source="slots" data-row-key="slot">
-        <thead><tr><th data-field="slot">Время</th><th class="r" data-field="rl">Раб. листы</th><th class="r" data-field="share" data-fmt="pct">Доля</th><th class="r" data-field="median_min">Медиана, мин</th><th class="r" data-field="fast_pct" data-fmt="pct" data-bad="lt:0.8">Взяты за 15 мин</th><th class="r" data-field="not_taken">Не брали</th><th class="r" data-field="not_taken_pct" data-fmt="pct" data-bad="gt:0.2">% не брали</th><th class="r" data-field="sales">Продажи</th></tr></thead>
+        <thead><tr><th data-field="slot">Время</th><th class="r" data-field="rl">Раб. листы</th><th class="r" data-field="share" data-fmt="pct">Доля</th><th class="r" data-field="median_min">Медиана, раб. мин</th><th class="r" data-field="median_min_cal">Медиана, всего мин</th><th class="r" data-field="fast_pct" data-fmt="pct" data-bad="lt:0.8">Взяты за 15 раб. мин</th><th class="r" data-field="not_taken">Не брали</th><th class="r" data-field="not_taken_pct" data-fmt="pct" data-bad="gt:0.2">% не брали</th><th class="r" data-field="sales">Продажи</th></tr></thead>
         <tbody data-draw="tbody"></tbody>
       </table></div>
     </div>
@@ -682,7 +682,22 @@ window.HD = (function () {
   H.SELF = ['Проходящий трафик', 'Повторный клиент', 'Рекомендации'];
   H.NOSRC = 'Звонок без источника';
   H.CH_ORDER = ['Meta Ads', 'Google / Maps', 'Telegram', 'Сайт', 'Автоагрегаторы', 'Мероприятия', 'Звонок без источника', 'Проходящий трафик', 'Повторный клиент', 'Рекомендации', 'Блогеры', 'Яндекс Директ', 'Прочее'];
-  H.SLOTS = ['Будни 9:00–18:00', 'Будни 18:00–21:00', 'Выходные 9:00–21:00', 'Ночь 21:00–9:00'];
+  H.SLOTS = ['Рабочее время 9:00–20:00', 'Вечер 20:00–00:00', 'Ночь 00:00–9:00'];
+  // График обработки: каждый день 9:00–20:00, без выходных. Время до взятия считается только в эти часы.
+  H.WORK_FROM = 9 * 60; H.WORK_TO = 20 * 60;
+  H.tmin = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/.exec(s || ''); return m ? Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5]) / 6e4 : null; };
+  H.workMin = (t0, t1) => {
+    if (t0 == null || t1 == null || t1 < t0) return null;
+    let total = 0;
+    for (let day = Math.floor(t0 / 1440); day <= Math.floor(t1 / 1440); day++) {
+      const ws = day * 1440 + H.WORK_FROM, we = day * 1440 + H.WORK_TO;
+      total += Math.max(0, Math.min(t1, we) - Math.max(t0, ws));
+    }
+    return total;
+  };
+  H.slotOf = (s) => { const t = H.tmin(s); if (t == null) return ''; const m = ((t % 1440) + 1440) % 1440; return m >= H.WORK_FROM && m < H.WORK_TO ? H.SLOTS[0] : m >= H.WORK_TO ? H.SLOTS[1] : H.SLOTS[2]; };
+  // рабочие минуты от создания до взятия; если времени взятия нет — создание + календарные минуты из таблицы
+  H.takeWork = (created, taken, calMin) => { const t0 = H.tmin(created); if (t0 == null) return calMin; const t1 = H.tmin(taken); return H.workMin(t0, t1 != null ? t1 : (calMin != null ? t0 + calMin : null)); };
   H.addDays = (iso, k) => { const d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + k); return d.toISOString().slice(0, 10); };
   H.span = (a, b) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5) + 1;
   H.days = (a, b) => { const out = []; for (let d = a; d <= b; d = H.addDays(d, 1)) out.push(d); return out; };
@@ -761,9 +776,13 @@ dash.loader('crm', {
       if (!r || !r.some((c) => String(c).trim() !== '')) continue;
       const o = {};
       for (const k of cols) { const c = idx[k] == null ? '' : r[idx[k]]; o[k] = NUM.includes(k) ? num(c) : DT.includes(k) ? dt(c) : (c == null ? '' : String(c).trim()); }
+      const H = window.HD;
+      o.take_min_cal = o.take_min;
+      if (o.taken_at) o.take_min = H.takeWork(o.created_at, o.taken_at, o.take_min_cal);
+      if (o.created_at && H.tmin(o.created_at) != null) o.slot = H.slotOf(o.created_at);
       rows.push(o);
     }
-    return { columns: cols, rows };
+    return { columns: [...cols, 'take_min_cal'], rows };
   },
 });
 
@@ -828,9 +847,10 @@ dash.loader('leads_meta', {
     for (const r of values.slice(1)) {
       if (!r || !r.some((c) => String(c).trim() !== '')) continue;
       const created = dt(cell(r, 'created_at'));
-      rows.push({ date: created ? created.slice(0, 10) : null, created_at: created, model: cell(r, 'model'), operator: cell(r, 'operator'), result: cell(r, 'result'), take_min: num(cell(r, 'take_min')) });
+      const cal = num(cell(r, 'take_min'));
+      rows.push({ date: created ? created.slice(0, 10) : null, created_at: created, model: cell(r, 'model'), operator: cell(r, 'operator'), result: cell(r, 'result'), take_min: window.HD.takeWork(created, null, cal), take_min_cal: cal });
     }
-    return { columns: ['date', 'created_at', 'model', 'operator', 'result', 'take_min'], rows };
+    return { columns: ['date', 'created_at', 'model', 'operator', 'result', 'take_min', 'take_min_cal'], rows };
   },
 });
 
@@ -1068,7 +1088,7 @@ dash.calc('operators', {
     const lm = leadsMeta.filter((r) => H.inR(r.date, w.from, w.to) && H.okModel(r.model, p));
     return [...new Set(lm.map((r) => r.operator || '— не обработан'))].map((o) => {
       const g = lm.filter((r) => (r.operator || '— не обработан') === o), rl = g.filter((r) => r.result === 'Создан РЛ').length;
-      return { operator: o, leads: g.length, rl, rl_pct: H.r4(rl / g.length), not_left: g.filter((r) => r.result === 'Не оставлял заявку').length, off: g.filter((r) => r.result === 'Номер отключен').length, refused: g.filter((r) => r.result === 'Отказ от соединения').length, median_min: H.median(g.map((r) => r.take_min)) };
+      return { operator: o, leads: g.length, rl, rl_pct: H.r4(rl / g.length), not_left: g.filter((r) => r.result === 'Не оставлял заявку').length, off: g.filter((r) => r.result === 'Номер отключен').length, refused: g.filter((r) => r.result === 'Отказ от соединения').length, median_min: H.median(g.map((r) => r.take_min)), median_min_cal: H.median(g.map((r) => r.take_min_cal)) };
     }).sort((a, b) => b.leads - a.leads);
   },
 });
@@ -1081,9 +1101,9 @@ dash.calc('processing', {
     const H = window.HD, p = dash.params(), w = H.win(crm);
     if (!w) return [];
     const rl = crm.filter((r) => H.inR(r.date, w.from, w.to) && H.okModel(r.model, p) && H.okCh(r.channel, p));
-    const taken = rl.filter((r) => r.taken_at), mins = taken.map((r) => r.take_min).filter((x) => x != null);
-    const fast = mins.filter((x) => x <= 15).length, late = mins.filter((x) => x > 1440).length, refused = rl.filter((r) => r.reason).length;
-    return [{ rl: rl.length, taken: taken.length, avg_h: H.r2(H.div(H.mean(mins), 60)), median_min: H.median(mins), fast, fast_pct: H.r4(H.div(fast, mins.length)), late, late_pct: H.r4(H.div(late, mins.length)), not_taken: rl.length - taken.length, not_taken_pct: H.r4(H.div(rl.length - taken.length, rl.length)), refused, refused_pct: H.r4(H.div(refused, rl.length)) }];
+    const taken = rl.filter((r) => r.taken_at), mins = taken.map((r) => r.take_min).filter((x) => x != null), cal = taken.map((r) => r.take_min_cal).filter((x) => x != null);
+    const fast = mins.filter((x) => x <= 15).length, late = mins.filter((x) => x > (H.WORK_TO - H.WORK_FROM)).length, refused = rl.filter((r) => r.reason).length;
+    return [{ rl: rl.length, taken: taken.length, avg_h: H.r2(H.div(H.mean(mins), 60)), median_min: H.median(mins), avg_h_cal: H.r2(H.div(H.mean(cal), 60)), median_min_cal: H.median(cal), fast, fast_pct: H.r4(H.div(fast, mins.length)), late, late_pct: H.r4(H.div(late, mins.length)), not_taken: rl.length - taken.length, not_taken_pct: H.r4(H.div(rl.length - taken.length, rl.length)), refused, refused_pct: H.r4(H.div(refused, rl.length)) }];
   },
 });
 
@@ -1132,7 +1152,7 @@ dash.calc('slots', {
     const rl = crm.filter((r) => H.inR(r.date, w.from, w.to) && H.okModel(r.model, p) && H.okCh(r.channel, p));
     const row = (name, g) => {
       const mins = g.filter((r) => r.taken_at).map((r) => r.take_min).filter((x) => x != null), nt = g.filter((r) => !r.taken_at).length;
-      return { slot: name, rl: g.length, share: H.r4(H.div(g.length, rl.length)), median_min: H.median(mins), fast_pct: H.r4(H.div(mins.filter((x) => x <= 15).length, mins.length)), not_taken: nt, not_taken_pct: H.r4(H.div(nt, g.length)), sales: H.sum(g, (r) => r.sale) };
+      return { slot: name, rl: g.length, share: H.r4(H.div(g.length, rl.length)), median_min: H.median(mins), median_min_cal: H.median(g.filter((r) => r.taken_at).map((r) => r.take_min_cal)), fast_pct: H.r4(H.div(mins.filter((x) => x <= 15).length, mins.length)), not_taken: nt, not_taken_pct: H.r4(H.div(nt, g.length)), sales: H.sum(g, (r) => r.sale) };
     };
     const names = [...new Set([...H.SLOTS, ...rl.map((r) => r.slot).filter(Boolean)])];
     const out = names.map((s) => row(s, rl.filter((r) => r.slot === s)));
