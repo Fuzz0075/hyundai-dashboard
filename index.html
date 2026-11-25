@@ -102,7 +102,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
   #tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; flex-direction: row; gap: 0;
     padding: 6px max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
     background: color-mix(in srgb, var(--color-panel) 92%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-top: 1px solid var(--color-border-line); }
-  #tabs button { flex: 1; flex-direction: column; justify-content: center; gap: 3px; height: 54px; padding: 0 4px; border-radius: 12px; color: var(--color-fg-muted); font-size: 12px; font-weight: 500; text-align: center; }
+  #tabs button { flex: 1; min-width: 0; flex-direction: column; justify-content: center; gap: 3px; height: 54px; padding: 0 2px; border-radius: 12px; color: var(--color-fg-muted); font-size: 11px; font-weight: 500; text-align: center; }
   #tabs svg { width: 24px; height: 24px; }
   #tabs button[aria-pressed="true"] { background: none; color: var(--c1); font-weight: 700; }
   #tabs button[aria-pressed="true"] svg { stroke-width: 2.3; }
@@ -350,6 +350,42 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
   .hd-table th { font-size: 12px; padding: 8px; }
 }
 
+/* ===== Интерактивная воронка ===== */
+.hd-fv { display: flex; flex-direction: column; gap: 4px; }
+.hd-fv-step { display: grid; grid-template-columns: minmax(130px, 190px) 1fr 52px; align-items: center; gap: 12px; height: 50px; padding: 0 4px; border: 0; border-radius: 10px; background: none; cursor: pointer; font: inherit; color: inherit; text-align: left; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.hd-fv-step.is-on { background: color-mix(in srgb, var(--hd-brand, var(--color-fg)) 7%, transparent); }
+.hd-fv-mid { position: relative; height: 100%; }
+.hd-fv-shape { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: 0 auto; background: var(--hd-brand, var(--color-fg)); transition: filter .15s; }
+.hd-fv-step.is-goal .hd-fv-shape { background: var(--hd-accent, var(--color-ok)); opacity: 1 !important; }
+.hd-fv-step.is-on .hd-fv-shape { filter: brightness(1.2) saturate(1.15); }
+.hd-fv-step:focus-visible { outline: 2px solid var(--hd-accent, #00aad2); outline-offset: 2px; }
+.hd-fv-lab { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.hd-fv-lab span { font-size: 13px; color: var(--color-fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hd-fv-lab b { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--hd-brand, var(--color-fg)); }
+.hd-fv-conv { font-style: normal; text-align: right; font-size: 14px; font-weight: 600; color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.hd-fv-conv.is-bad { color: var(--color-bad); }
+.hd-fv-detail { margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: color-mix(in srgb, var(--hd-brand, var(--color-fg)) 6%, transparent); }
+.hd-fv-dh { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.hd-fv-dg { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px 16px; }
+.hd-fv-dg span { display: block; font-size: 13px; color: var(--color-fg-muted); }
+.hd-fv-dg b { font-size: 20px; line-height: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.hd-fv-dg b.is-bad { color: var(--color-bad); }
+.hd-hb { display: grid; grid-template-columns: minmax(140px, 220px) 1fr 64px 44px; gap: 10px; align-items: center; font-size: 14px; padding: 4px 0; }
+.hd-hb span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hd-hb b { text-align: right; font-variant-numeric: tabular-nums; }
+.hd-hb i { font-style: normal; text-align: right; font-size: 12px; color: var(--color-fg-muted); }
+.hd-hb .hd-track { height: 14px; }
+.hd-intro { margin: 0; font-size: 14px; line-height: 20px; color: var(--color-fg-muted); }
+.hd-intro b { color: var(--color-fg); }
+@container hd (max-width: 480px) {
+  .hd-fv-step { grid-template-columns: 104px 1fr 40px; gap: 8px; height: 46px; }
+  .hd-fv-lab span { font-size: 11px; }
+  .hd-fv-lab b { font-size: 16px; }
+  .hd-fv-conv { font-size: 12px; }
+  .hd-hb { grid-template-columns: 1fr 64px 40px; }
+  .hd-hb .hd-track { grid-column: 1 / -1; grid-row: 2; }
+}
+
 </style>
 </head>
 <body>
@@ -371,7 +407,9 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
       <div class="brand"><span class="logo" role="img" aria-label="Hyundai"></span><span class="brand-sub">Samarkand · маркетинг</span></div>
       <nav id="tabs" aria-label="Разделы">
         <button type="button" data-tab="overview" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span class="t-long">Обзор</span><span class="t-short">Обзор</span></button>
-        <button type="button" data-tab="marketing" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span class="t-long">Маркетинг и Meta</span><span class="t-short">Маркетинг</span></button>
+        <button type="button" data-tab="samarkand" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4Z"/></svg><span class="t-long">Воронка Samarkand</span><span class="t-short">Samarkand</span></button>
+        <button type="button" data-tab="uzbekistan" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg><span class="t-long">Воронка Uzbekistan</span><span class="t-short">Дистриб.</span></button>
+        <button type="button" data-tab="marketing" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span class="t-long">Маркетинг и Meta</span><span class="t-short">Meta</span></button>
         <button type="button" data-tab="team" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.5a5 5 0 0 1 5.5 5"/></svg><span class="t-long">Команда и обработка</span><span class="t-short">Команда</span></button>
       </nav>
       <div class="side-foot">
@@ -503,6 +541,63 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
         <thead><tr><th data-field="channel">Канал</th><th class="r" data-field="spend" data-fmt="usd">Расход</th><th class="r" data-field="leads">Лиды</th><th class="r" data-field="rl">Раб. листы</th><th class="r" data-field="visited">Пришли</th><th class="r" data-field="sales">Продажи</th><th class="r" data-field="cpl" data-fmt="usda">Цена лида</th><th class="r" data-field="cac" data-fmt="usd">CAC</th><th class="r" data-field="lead_rl" data-fmt="pct">Лид → РЛ</th><th class="r" data-field="share" data-fmt="pct">Доля РЛ</th></tr></thead>
         <tbody data-draw="tbody"></tbody>
       </table></div>
+    </div>
+  </section>
+
+
+  <!-- ================= ВОРОНКА HYUNDAI SAMARKAND ================= -->
+  <section class="hd-page" id="samarkand" data-tab-page="samarkand" hidden>
+    <p class="hd-intro"><b>Воронка Hyundai Samarkand</b> — всё, на что работает отдел маркетинга: Meta, Яндекс, сайт, звонки и клиенты, пришедшие сами. Без лидов дистрибьютора. Работают все фильтры.</p>
+    <div class="hd-kpis">
+      <div class="hd-card hd-kpi"><span class="hd-label">Расход</span><div class="hd-kpi-value"><span data-draw="val" data-source="proc_sam" data-field="spend" data-row="0" data-fmt="usd">—</span></div><div class="hd-note">Meta + лист «Расходы»</div></div>
+      <div class="hd-card hd-kpi"><span class="hd-label">Цена рабочего листа</span><div class="hd-kpi-value"><span data-draw="val" data-source="proc_sam" data-field="cpl" data-row="0" data-fmt="usda">—</span></div><div class="hd-note"><span data-draw="val" data-source="proc_sam" data-field="rl" data-row="0" data-fmt="int">—</span> РЛ</div></div>
+      <div class="hd-card hd-kpi"><span class="hd-label">Цена визита</span><div class="hd-kpi-value"><span data-draw="val" data-source="proc_sam" data-field="cost_visit" data-row="0" data-fmt="usda">—</span></div><div class="hd-note"><span data-draw="val" data-source="proc_sam" data-field="visited" data-row="0" data-fmt="int">—</span> визитов</div></div>
+      <div class="hd-card hd-kpi" id="kpi-sam-cac"><span class="hd-label">Цена продажи</span><div class="hd-kpi-value"><span data-draw="val" data-source="proc_sam" data-field="cac" data-row="0" data-fmt="usd">—</span></div><div class="hd-note"><span data-draw="val" data-source="proc_sam" data-field="sales" data-row="0" data-fmt="int">—</span> продаж</div></div>
+    </div>
+    <div class="hd-grid2">
+    <div class="hd-card" id="fun-sam">
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Воронка Hyundai Samarkand</h3><p class="hd-card-sub">Лиды = входящие лиды AutoCRM + пришедшие сами. Нажмите на этап — увидите конверсию, потери и стоимость за 1.</p></div></div>
+      <div class="hd-card-body"><div data-draw="funnel-viz" data-source="fun_sam"></div></div>
+    </div>
+    
+    <div class="hd-card" id="spend-sam">
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Куда ушёл расход</h3><p class="hd-card-sub">Канал · модель. Meta — по группам объявлений, остальное — лист «Расходы».</p></div></div>
+      <div class="hd-card-body"><div data-draw="hbars" data-source="spend_sam"></div></div>
+    </div></div>
+    
+    <div class="hd-card" id="proc-sam">
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Обработка и результат</h3><p class="hd-card-sub">Как быстро берут и чем заканчиваются рабочие листы Самарканда.</p></div></div>
+      <div class="hd-strip"><div><div class="hd-strip-label">Медиана до взятия</div><div class="hd-strip-value"><span data-draw="val" data-source="proc_sam" data-field="median_min" data-row="0" data-fmt="min">—</span></div><div class="hd-strip-note">рабочие минуты 9:00–20:00 · ср. <span data-draw="val" data-source="proc_sam" data-field="avg_h" data-row="0" data-fmt="h1">—</span></div></div><div><div class="hd-strip-label">Взяты за 15 мин</div><div class="hd-strip-value is-bad"><span data-draw="val" data-source="proc_sam" data-field="fast_pct" data-row="0" data-fmt="pct">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="proc_sam" data-field="fast" data-row="0" data-fmt="int">—</span> из <span data-draw="val" data-source="proc_sam" data-field="taken" data-row="0" data-fmt="int">—</span> · цель 80%</div></div><div><div class="hd-strip-label">Не брали в работу</div><div class="hd-strip-value is-bad"><span data-draw="val" data-source="proc_sam" data-field="not_taken" data-row="0" data-fmt="int">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="proc_sam" data-field="not_taken_pct" data-row="0" data-fmt="pct">—</span> от РЛ</div></div><div><div class="hd-strip-label">Отказ</div><div class="hd-strip-value"><span data-draw="val" data-source="proc_sam" data-field="refused_pct" data-row="0" data-fmt="pct">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="proc_sam" data-field="refused" data-row="0" data-fmt="int">—</span> РЛ · чаще всего: <span data-draw="val" data-source="proc_sam" data-field="top_reason" data-row="0" data-fmt="text">—</span></div></div><div><div class="hd-strip-label">Визит / продажа</div><div class="hd-strip-value"><span data-draw="val" data-source="proc_sam" data-field="cr_visit" data-row="0" data-fmt="pct1">—</span></div><div class="hd-strip-note">в продажу <span data-draw="val" data-source="proc_sam" data-field="cr_sale" data-row="0" data-fmt="pct1">—</span></div></div></div>
+    </div>
+    
+    <div class="hd-card" id="ch-sam">
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Расход и результат по каналам</h3><p class="hd-card-sub">Сколько потратили и что получили на каждом этапе. Фильтр канала здесь не применяется.</p></div></div>
+      <div class="hd-scroll"><table class="hd-table" data-source="ch_sam" data-row-key="name"><thead><tr><th data-field="name">Канал</th><th class="r" data-field="spend" data-fmt="usd">Расход</th><th class="r" data-field="spend_share" data-fmt="pct">Доля расхода</th><th class="r" data-field="leads">Лиды</th><th class="r" data-field="rl">Раб. листы</th><th class="r" data-field="visited">Визит</th><th class="r" data-field="sales">Продажи</th><th class="r" data-field="cpl" data-fmt="usda">Цена лида</th><th class="r" data-field="cost_rl" data-fmt="usda">Цена РЛ</th><th class="r" data-field="cost_visit" data-fmt="usda">Цена визита</th><th class="r" data-field="cac" data-fmt="usd">Цена продажи</th><th class="r" data-field="median_min" data-bad="gt:60">Медиана, раб. мин</th><th class="r" data-field="not_taken_pct" data-fmt="pct" data-bad="gt:0.2">Не брали</th><th class="r" data-field="refused_pct" data-fmt="pct">Отказ</th></tr></thead><tbody data-draw="tbody"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ================= ВОРОНКА HYUNDAI UZBEKISTAN ================= -->
+  <section class="hd-page" id="uzbekistan" data-tab-page="uzbekistan" hidden>
+    <p class="hd-intro"><b>Воронка Hyundai Uzbekistan</b> — лиды, которые передаёт дистрибьютор (источник «дистрибьютор» в AutoCRM). Маркетинг на них не тратит. Фильтр модели работает, фильтр канала — нет.</p>
+    <div class="hd-grid2">
+    <div class="hd-card" id="fun-uz">
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Воронка лидов дистрибьютора</h3><p class="hd-card-sub">Наведите или нажмите на этап — внизу конверсия и потери. Справа — % из предыдущего этапа.</p></div></div>
+      <div class="hd-card-body"><div data-draw="funnel-viz" data-source="fun_dist" data-empty="Лидов с источником «дистрибьютор» в таблице пока нет — нужно обновить выгрузку из AutoCRM."></div></div>
+    </div>
+    
+    <div class="hd-card" id="proc-uz">
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Обработка и результат</h3><p class="hd-card-sub">Как быстро берут и чем заканчиваются рабочие листы дистрибьютора.</p></div></div>
+      <div class="hd-strip"><div><div class="hd-strip-label">Медиана до взятия</div><div class="hd-strip-value"><span data-draw="val" data-source="proc_dist" data-field="median_min" data-row="0" data-fmt="min">—</span></div><div class="hd-strip-note">рабочие минуты 9:00–20:00 · ср. <span data-draw="val" data-source="proc_dist" data-field="avg_h" data-row="0" data-fmt="h1">—</span></div></div><div><div class="hd-strip-label">Взяты за 15 мин</div><div class="hd-strip-value is-bad"><span data-draw="val" data-source="proc_dist" data-field="fast_pct" data-row="0" data-fmt="pct">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="proc_dist" data-field="fast" data-row="0" data-fmt="int">—</span> из <span data-draw="val" data-source="proc_dist" data-field="taken" data-row="0" data-fmt="int">—</span> · цель 80%</div></div><div><div class="hd-strip-label">Не брали в работу</div><div class="hd-strip-value is-bad"><span data-draw="val" data-source="proc_dist" data-field="not_taken" data-row="0" data-fmt="int">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="proc_dist" data-field="not_taken_pct" data-row="0" data-fmt="pct">—</span> от РЛ</div></div><div><div class="hd-strip-label">Отказ</div><div class="hd-strip-value"><span data-draw="val" data-source="proc_dist" data-field="refused_pct" data-row="0" data-fmt="pct">—</span></div><div class="hd-strip-note"><span data-draw="val" data-source="proc_dist" data-field="refused" data-row="0" data-fmt="int">—</span> РЛ · чаще всего: <span data-draw="val" data-source="proc_dist" data-field="top_reason" data-row="0" data-fmt="text">—</span></div></div><div><div class="hd-strip-label">Визит / продажа</div><div class="hd-strip-value"><span data-draw="val" data-source="proc_dist" data-field="cr_visit" data-row="0" data-fmt="pct1">—</span></div><div class="hd-strip-note">в продажу <span data-draw="val" data-source="proc_dist" data-field="cr_sale" data-row="0" data-fmt="pct1">—</span></div></div></div>
+    </div></div>
+    
+    <div class="hd-card" id="models-uz">
+      <div class="hd-card-head"><div><h3 class="hd-card-title">По моделям</h3><p class="hd-card-sub">Рабочие листы дистрибьютора по модели.</p></div></div>
+      <div class="hd-scroll"><table class="hd-table" data-source="models_dist" data-row-key="name"><thead><tr><th data-field="name">Модель</th><th class="r" data-field="rl">Раб. листы</th><th class="r" data-field="median_min" data-bad="gt:60">Медиана, раб. мин</th><th class="r" data-field="not_taken_pct" data-fmt="pct" data-bad="gt:0.2">Не брали</th><th class="r" data-field="refused_pct" data-fmt="pct">Отказ</th><th class="r" data-field="visited">Визит</th><th class="r" data-field="sales">Продажи</th><th class="r" data-field="cr_sale" data-fmt="pct1">CR → продажа</th></tr></thead><tbody data-draw="tbody"></tbody></table></div>
+    </div>
+    
+    <div class="hd-card" id="mgr-uz">
+      <div class="hd-card-head"><div><h3 class="hd-card-title">По менеджерам</h3><p class="hd-card-sub">Ответственный в рабочем листе.</p></div></div>
+      <div class="hd-scroll"><table class="hd-table" data-source="mgr_dist" data-row-key="name"><thead><tr><th data-field="name">Менеджер</th><th class="r" data-field="rl">Раб. листы</th><th class="r" data-field="median_min" data-bad="gt:60">Медиана, раб. мин</th><th class="r" data-field="not_taken_pct" data-fmt="pct" data-bad="gt:0.2">Не брали</th><th class="r" data-field="refused_pct" data-fmt="pct">Отказ</th><th class="r" data-field="visited">Визит</th><th class="r" data-field="sales">Продажи</th><th class="r" data-field="cr_sale" data-fmt="pct1">CR → продажа</th></tr></thead><tbody data-draw="tbody"></tbody></table></div>
     </div>
   </section>
 
@@ -681,6 +776,9 @@ window.HD = (function () {
   const H = {};
   H.SELF = ['Проходящий трафик', 'Повторный клиент', 'Рекомендации'];
   H.NOSRC = 'Звонок без источника';
+  H.DIST = 'Дистрибьютор';
+  H.isDistSrc = (s) => /дистриб/i.test(String(s || ''));
+  H.isDist = (r) => H.isDistSrc(r.source) || r.channel === H.DIST;
   H.CH_ORDER = ['Meta Ads', 'Google / Maps', 'Telegram', 'Сайт', 'Автоагрегаторы', 'Мероприятия', 'Звонок без источника', 'Проходящий трафик', 'Повторный клиент', 'Рекомендации', 'Блогеры', 'Яндекс Директ', 'Прочее'];
   H.SLOTS = ['Рабочее время 9:00–20:00', 'Вечер 20:00–00:00', 'Ночь 00:00–9:00'];
   // График обработки: каждый день 9:00–20:00, без выходных. Время до взятия считается только в эти часы.
@@ -780,6 +878,7 @@ dash.loader('crm', {
       o.take_min_cal = o.take_min;
       if (o.taken_at) o.take_min = H.takeWork(o.created_at, o.taken_at, o.take_min_cal);
       if (o.created_at && H.tmin(o.created_at) != null) o.slot = H.slotOf(o.created_at);
+      if (H.isDistSrc(o.source)) o.channel = H.DIST;
       rows.push(o);
     }
     return { columns: [...cols, 'take_min_cal'], rows };
@@ -826,6 +925,7 @@ dash.loader('leads_crm', {
       if (!r || !r.some((c) => String(c).trim() !== '')) continue;
       const o = {};
       for (const k of cols) { const c = idx[k] == null ? '' : r[idx[k]]; o[k] = NUM.includes(k) ? num(c) : DT.includes(k) ? dt(c) : (c == null ? '' : String(c).trim()); }
+      if (window.HD.isDistSrc(o.source)) o.channel = window.HD.DIST;
       rows.push(o);
     }
     return { columns: cols, rows };
@@ -1161,6 +1261,93 @@ dash.calc('slots', {
   },
 });
 
+
+// ===== Воронки: Hyundai Uzbekistan (лиды дистрибьютора) и Hyundai Samarkand (всё остальное) =====
+(function () {
+  const H = window.HD;
+  H.FUNNEL = [['leads', 'Лиды'], ['taken', 'Взяты в работу'], ['rl', 'Рабочие листы'], ['booked', 'Запись на визит'], ['visited', 'Визит в салон'], ['testdrive', 'Тест-драйв'], ['contract', 'Договор'], ['sales', 'Продажа']];
+  // rl — рабочие листы воронки; leads/taken — лиды AutoCRM (null, если нет данных)
+  H.funnel = (rl, leads, taken, spend) => {
+    const v = { leads, taken, rl: rl.length, booked: H.sum(rl, (r) => r.booked), visited: H.sum(rl, (r) => r.visited), testdrive: H.sum(rl, (r) => r.testdrive), contract: H.sum(rl, (r) => r.contract), sales: H.sum(rl, (r) => r.sale) };
+    const steps = H.FUNNEL.filter(([k]) => v[k] != null);
+    const top = steps.length ? v[steps[0][0]] : 0;
+    return steps.map(([k, label], i) => {
+      const n = v[k], prev = i ? v[steps[i - 1][0]] : null;
+      return { key: k, stage: label, n, conv_prev: i ? H.r4(H.div(n, prev)) : null, conv_top: H.r4(H.div(n, top)), drop: i && prev != null ? Math.max(prev - n, 0) : null, cost: spend ? H.r2(H.div(spend, n)) : null };
+    });
+  };
+  H.procOf = (rl) => {
+    const taken = rl.filter((r) => r.taken_at), mins = taken.map((r) => r.take_min).filter((x) => x != null);
+    const fast = mins.filter((x) => x <= 15).length, refused = rl.filter((r) => r.reason).length;
+    const reasons = {}; rl.filter((r) => r.reason).forEach((r) => { reasons[r.reason] = (reasons[r.reason] || 0) + 1; });
+    const top = Object.entries(reasons).sort((a, b) => b[1] - a[1])[0];
+    return { rl: rl.length, taken: taken.length, median_min: H.median(mins), avg_h: H.r2(H.div(H.mean(mins), 60)), fast, fast_pct: H.r4(H.div(fast, mins.length)), not_taken: rl.length - taken.length, not_taken_pct: H.r4(H.div(rl.length - taken.length, rl.length)), refused, refused_pct: H.r4(H.div(refused, rl.length)), top_reason: top ? top[0] : null, top_reason_n: top ? top[1] : null, visited: H.sum(rl, (r) => r.visited), sales: H.sum(rl, (r) => r.sale), cr_visit: H.r4(H.div(H.sum(rl, (r) => r.visited), rl.length)), cr_sale: H.r4(H.div(H.sum(rl, (r) => r.sale), rl.length)) };
+  };
+  H.byKey = (rl, keyOf, extra) => {
+    const names = [...new Set(rl.map(keyOf))];
+    const out = names.map((k) => { const g = rl.filter((r) => keyOf(r) === k); return { name: k, ...H.procOf(g), ...(extra ? extra(k, g) : {}) }; }).sort((a, b) => b.rl - a.rl);
+    out.push({ name: 'Итого', ...H.procOf(rl), ...(extra ? extra(null, rl) : {}) });
+    return out;
+  };
+  const distRl = (crm) => { const p = dash.params(), w = H.win(crm); return w ? crm.filter((r) => H.isDist(r) && H.inR(r.date, w.from, w.to) && H.okModel(r.model, p)) : []; };
+  const samRl = (crm) => { const p = dash.params(), w = H.win(crm); return w ? crm.filter((r) => !H.isDist(r) && H.inR(r.date, w.from, w.to) && H.okModel(r.model, p) && H.okCh(r.channel, p)) : []; };
+  const distLeads = (crm, leadsCrm) => { const w = H.win(crm); if (!w) return null; const l = leadsCrm.filter((r) => H.isDistSrc(r.source) && H.inR(r.date, w.from, w.to)); return l.length ? { leads: H.sum(l, (r) => r.created), taken: H.sum(l, (r) => r.taken) } : null; };
+  // лиды Самарканда: входящие лиды AutoCRM без дистрибьютора + клиенты, пришедшие сами (у них РЛ без лида)
+  const samLeads = (crm, leadsCrm, rl) => {
+    const p = dash.params(), w = H.win(crm); if (!w) return null;
+    const l = leadsCrm.filter((r) => H.inR(r.date, w.from, w.to));
+    let leads, taken;
+    if (p.channel) { const g = l.filter((r) => r.source !== 'все' && r.channel === p.channel); if (!g.length && !H.SELF.includes(p.channel)) return null; leads = H.sum(g, (r) => r.created); taken = H.sum(g, (r) => r.taken); }
+    else { const all = l.filter((r) => r.source === 'все'), dist = l.filter((r) => H.isDistSrc(r.source)); if (!all.length) return null; leads = H.sum(all, (r) => r.created) - H.sum(dist, (r) => r.created); taken = H.sum(all, (r) => r.taken) - H.sum(dist, (r) => r.taken); }
+    const self = rl.filter((r) => H.SELF.includes(r.channel)).length;
+    return { leads: leads + self, taken: taken + self, self };
+  };
+  const samSpend = (crm, meta, spend) => { const p = dash.params(), w = H.win(crm); if (!w) return 0; return H.sum(H.spendRows(meta, spend).filter((r) => H.inR(r.date, w.from, w.to) && H.okModel(r.model, p) && H.okCh(r.channel, p)), (r) => r.spend); };
+
+  dash.calc('fun_dist', { inputs: ['crm', 'leads_crm'], title: 'Воронка Hyundai Uzbekistan', description: 'Лиды и рабочие листы AutoCRM с источником «дистрибьютор». Фильтр модели учитывается, канала — нет.',
+    fn: (crm, lc) => { const rl = distRl(crm), l = distLeads(crm, lc); return rl.length || l ? H.funnel(rl, l ? l.leads : null, l ? l.taken : null, 0) : []; } });
+  dash.calc('proc_dist', { inputs: ['crm'], title: 'Обработка — дистрибьютор', description: 'Время до взятия (рабочие часы 9:00–20:00), не взятые, отказы, результат по РЛ дистрибьютора.',
+    fn: (crm) => [H.procOf(distRl(crm))] });
+  dash.calc('models_dist', { inputs: ['crm'], title: 'Модели — дистрибьютор', description: 'Рабочие листы дистрибьютора по модели.',
+    fn: (crm) => { const rl = distRl(crm); return rl.length ? H.byKey(rl, (r) => r.model || 'Не указана') : []; } });
+  dash.calc('mgr_dist', { inputs: ['crm'], title: 'Менеджеры — дистрибьютор', description: 'Рабочие листы дистрибьютора по ответственному менеджеру.',
+    fn: (crm) => { const rl = distRl(crm); return rl.length ? H.byKey(rl, (r) => r.manager || '— не назначен') : []; } });
+
+  dash.calc('fun_sam', { inputs: ['crm', 'leads_crm', 'meta', 'spend'], title: 'Воронка Hyundai Samarkand', description: 'Все источники, кроме дистрибьютора. Лиды = входящие лиды AutoCRM + клиенты, пришедшие сами. Стоимость этапа = расход ÷ число на этапе.',
+    fn: (crm, lc, meta, spend) => { const rl = samRl(crm), l = samLeads(crm, lc, rl); return H.funnel(rl, l ? l.leads : null, l ? l.taken : null, samSpend(crm, meta, spend)); } });
+  dash.calc('proc_sam', { inputs: ['crm', 'meta', 'spend'], title: 'Обработка — Самарканд', description: 'Обработка и результат по РЛ Самарканда (без дистрибьютора); расход и стоимость результата.',
+    fn: (crm, meta, spend) => { const rl = samRl(crm), s = samSpend(crm, meta, spend), o = H.procOf(rl); return [{ ...o, spend: H.r2(s), cpl: H.r2(H.div(s, rl.length)), cost_visit: H.r2(H.div(s, o.visited)), cac: H.r2(H.div(s, o.sales)) }]; } });
+  dash.calc('ch_sam', { inputs: ['crm', 'meta', 'spend', 'leads_crm'], title: 'Каналы — Самарканд', description: 'Расход и результат по каналу, без дистрибьютора. Фильтр канала не применяется.',
+    fn: (crm, meta, spend, lc) => {
+      const p = dash.params(), w = H.win(crm); if (!w) return [];
+      const rl = crm.filter((r) => !H.isDist(r) && H.inR(r.date, w.from, w.to) && H.okModel(r.model, p));
+      const sp = H.spendRows(meta, spend).filter((r) => H.inR(r.date, w.from, w.to) && H.okModel(r.model, p));
+      const SRC = { 'автолид-meta': 'Meta Ads', 'автолид-звонок': H.NOSRC, 'интернет': 'Сайт', 'прочее': 'Прочее' };
+      const leads = lc.filter((r) => H.inR(r.date, w.from, w.to) && r.source !== 'все' && !H.isDistSrc(r.source));
+      const names = [...new Set([...H.CH_ORDER, ...rl.map((r) => r.channel), ...sp.map((r) => r.channel)])].filter((x) => x && x !== H.DIST);
+      const tot = H.sum(sp, (r) => r.spend), out = [];
+      for (const ch of names) {
+        const g = rl.filter((r) => r.channel === ch), s = H.sum(sp.filter((r) => r.channel === ch), (r) => r.spend);
+        const lr = leads.filter((r) => (r.channel || SRC[r.source]) === ch), l = lr.length ? H.sum(lr, (r) => r.created) : null;
+        if (!g.length && !s && !l) continue;
+        const o = H.procOf(g);
+        out.push({ name: ch, spend: H.r2(s), spend_share: H.r4(H.div(s, tot)), leads: l, rl: g.length, visited: o.visited, sales: o.sales, cpl: s && l ? H.r2(s / l) : null, cost_rl: s && g.length ? H.r2(s / g.length) : null, cost_visit: s && o.visited ? H.r2(s / o.visited) : null, cac: s && o.sales ? H.r2(s / o.sales) : null, median_min: o.median_min, not_taken_pct: o.not_taken_pct, refused_pct: o.refused_pct });
+      }
+      out.sort((a, b) => (b.spend || 0) - (a.spend || 0) || b.rl - a.rl);
+      const o = H.procOf(rl), tl = H.sum(out, (r) => r.leads);
+      out.push({ name: 'Итого', spend: H.r2(tot), spend_share: tot ? 1 : null, leads: tl, rl: rl.length, visited: o.visited, sales: o.sales, cpl: H.r2(H.div(tot, tl)), cost_rl: H.r2(H.div(tot, rl.length)), cost_visit: H.r2(H.div(tot, o.visited)), cac: H.r2(H.div(tot, o.sales)), median_min: o.median_min, not_taken_pct: o.not_taken_pct, refused_pct: o.refused_pct });
+      return out;
+    } });
+  dash.calc('spend_sam', { inputs: ['crm', 'meta', 'spend'], title: 'Расход по каналам и моделям', description: 'Куда ушли деньги маркетинга: Meta по группам + лист «Расходы». Учитывает фильтры модели и канала.',
+    fn: (crm, meta, spend) => {
+      const p = dash.params(), w = H.win(crm); if (!w) return [];
+      const sp = H.spendRows(meta, spend).filter((r) => H.inR(r.date, w.from, w.to) && H.okModel(r.model, p) && H.okCh(r.channel, p));
+      const tot = H.sum(sp, (r) => r.spend), map = {};
+      sp.forEach((r) => { const k = r.channel + ' · ' + (r.model || 'Не указана'); map[k] = (map[k] || 0) + r.spend; });
+      return Object.entries(map).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ name: k, spend: H.r2(v), share: H.r4(H.div(v, tot)) }));
+    } });
+})();
+
 </script>
 <script>
 // ===== Отрисовка =====
@@ -1254,6 +1441,78 @@ dash.calc('slots', {
       cols.forEach(([f, , fmt], i) => { const td = tr.insertCell(); td.textContent = H.fmt(r[f], fmt); if (i) td.className = 'r'; });
     }
     el.append(t);
+  });
+
+  // ---------- интерактивная воронка ----------
+  // Каждая ступень — трапеция: ширина ∝ числу на этапе, низ сужается к следующей ступени.
+  // Наведение или нажатие на ступень показывает подробности: конверсия, потери, стоимость.
+  const fsel = {};
+  dash.draw('funnel-viz', (el) => {
+    const src = el.dataset.source, d = dash.data(src);
+    el.replaceChildren();
+    if (d.status !== 'ok') { const p = document.createElement('div'); p.className = 'hd-empty-msg'; p.textContent = statusTextF(d.status); el.append(p); return; }
+    const rows = d.data || [];
+    if (!rows.length || !rows.some((r) => r.n)) { const p = document.createElement('div'); p.className = 'hd-empty-msg'; p.textContent = el.dataset.empty || 'Нет данных за выбранный период'; el.append(p); return; }
+    const max = Math.max(...rows.map((r) => r.n || 0), 1);
+    const MIN = 14; // минимальная ширина ступени, %, чтобы малые этапы были видны
+    const wOf = (n) => MIN + (100 - MIN) * Math.sqrt((n || 0) / max);
+    const wrap = document.createElement('div'); wrap.className = 'hd-fv';
+    const detail = document.createElement('div'); detail.className = 'hd-fv-detail'; detail.setAttribute('aria-live', 'polite');
+    const show = (i) => {
+      fsel[src] = i;
+      wrap.querySelectorAll('.hd-fv-step').forEach((s, j) => s.classList.toggle('is-on', j === i));
+      const r = rows[i]; detail.replaceChildren();
+      const h = document.createElement('div'); h.className = 'hd-fv-dh'; h.textContent = r.stage; detail.append(h);
+      const grid = document.createElement('div'); grid.className = 'hd-fv-dg';
+      const cell = (label, value, bad) => { const c = document.createElement('div'); const l = document.createElement('span'); l.textContent = label; const v = document.createElement('b'); v.textContent = value; if (bad) v.className = 'is-bad'; c.append(l, v); grid.append(c); };
+      cell('На этапе', H.fmt(r.n, 'int'));
+      if (r.conv_prev != null) cell('Из предыдущего', H.fmt(r.conv_prev, 'pct1'));
+      cell('От первого этапа', H.fmt(r.conv_top, 'pct1'));
+      if (r.drop != null) cell('Потеряно на шаге', H.fmt(r.drop, 'int'), r.drop > 0 && r.conv_prev != null && r.conv_prev < 0.5);
+      if (r.cost != null) cell('Стоимость за 1', H.fmt(r.cost, 'usda'));
+      detail.append(grid);
+    };
+    rows.forEach((r, i) => {
+      const w = wOf(r.n), wn = i < rows.length - 1 ? wOf(rows[i + 1].n) : w * 0.92;
+      const inset = Math.max(0, (w - wn) / 2 / w * 100);
+      const step = document.createElement('button'); step.type = 'button'; step.className = 'hd-fv-step' + (r.key === 'sales' ? ' is-goal' : '');
+      step.setAttribute('aria-label', `${r.stage}: ${H.fmt(r.n, 'int')}`);
+      const shape = document.createElement('div'); shape.className = 'hd-fv-shape';
+      shape.style.width = w + '%'; shape.style.clipPath = `polygon(0 0, 100% 0, ${100 - inset}% 100%, ${inset}% 100%)`;
+      shape.style.opacity = String(1 - i * 0.07);
+      const lab = document.createElement('div'); lab.className = 'hd-fv-lab';
+      const name = document.createElement('span'); name.textContent = r.stage;
+      const num = document.createElement('b'); num.textContent = H.fmt(r.n, 'int');
+      lab.append(name, num);
+      const conv = document.createElement('i'); conv.className = 'hd-fv-conv';
+      conv.textContent = r.conv_prev == null ? '' : H.fmt(r.conv_prev, 'pct');
+      if (r.conv_prev != null && r.conv_prev < 0.3) conv.classList.add('is-bad');
+      const mid = document.createElement('div'); mid.className = 'hd-fv-mid'; mid.append(shape);
+      step.append(lab, mid, conv);
+      step.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') show(i); });
+      step.addEventListener('click', () => show(i));
+      wrap.append(step);
+    });
+    el.append(wrap, detail);
+    const s = fsel[src];
+    show(s != null && s < rows.length ? s : rows.length - 1);
+  });
+  const statusTextF = (s) => (s === 'loading' ? 'Загрузка…' : s === 'error' ? 'Не удалось загрузить данные из таблицы' : '—');
+
+  // Горизонтальные полосы расхода
+  dash.draw('hbars', (el) => {
+    const d = dash.data(el.dataset.source); el.replaceChildren();
+    if (d.status !== 'ok') { const p = document.createElement('div'); p.className = 'hd-empty-msg'; p.textContent = statusTextF(d.status); el.append(p); return; }
+    if (!d.data.length) { const p = document.createElement('div'); p.className = 'hd-empty-msg'; p.textContent = 'Нет расходов за период'; el.append(p); return; }
+    const max = Math.max(...d.data.map((r) => r.spend || 0), 1);
+    for (const r of d.data.slice(0, 12)) {
+      const row = document.createElement('div'); row.className = 'hd-hb';
+      const l = document.createElement('span'); l.textContent = r.name;
+      const t = document.createElement('div'); t.className = 'hd-track'; const b = document.createElement('div'); b.className = 'hd-bar'; b.style.width = (r.spend / max * 100) + '%'; t.append(b);
+      const v = document.createElement('b'); v.textContent = H.fmt(r.spend, 'usd');
+      const s = document.createElement('i'); s.textContent = H.fmt(r.share, 'pct');
+      row.append(l, t, v, s); el.append(row);
+    }
   });
 
   // ---------- графики ----------
@@ -1378,7 +1637,7 @@ dash.calc('slots', {
   };
   document.querySelectorAll('#tabs [data-tab]').forEach((b) => b.addEventListener('click', () => { show(b.dataset.tab); dash.setLink(b.dataset.tab); }));
   const start = (location.hash || '').slice(1);
-  if (['overview', 'marketing', 'team'].includes(start)) show(start);
+  if (['overview', 'samarkand', 'uzbekistan', 'marketing', 'team'].includes(start)) show(start);
   let before = null;
   window.addEventListener('beforeprint', () => { if (before) return; before = [...document.querySelectorAll('[data-tab-page]')].map((s) => s.hidden); document.querySelectorAll('[data-tab-page]').forEach((s) => { s.hidden = false; }); });
   window.addEventListener('afterprint', () => { if (!before) return; document.querySelectorAll('[data-tab-page]').forEach((s, i) => { s.hidden = before[i]; }); before = null; });
