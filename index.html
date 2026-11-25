@@ -582,7 +582,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
     <p class="hd-intro"><b>Воронка Hyundai Uzbekistan</b> — лиды, которые передаёт дистрибьютор (источник «дистрибьютор» в AutoCRM). Маркетинг на них не тратит. Фильтр модели работает, фильтр канала — нет.</p>
     <div class="hd-grid2">
     <div class="hd-card" id="fun-uz">
-      <div class="hd-card-head"><div><h3 class="hd-card-title">Воронка лидов дистрибьютора</h3><p class="hd-card-sub">Наведите или нажмите на этап — внизу конверсия и потери. Справа — % из предыдущего этапа.</p></div></div>
+      <div class="hd-card-head"><div><h3 class="hd-card-title">Воронка лидов дистрибьютора</h3><p class="hd-card-sub">Лиды — из отчёта AutoCRM; если рабочих листов больше (часть заведена без лида), берётся число РЛ. Нажмите на этап — внизу конверсия и потери.</p></div></div>
       <div class="hd-card-body"><div data-draw="funnel-viz" data-source="fun_dist" data-empty="Лидов с источником «дистрибьютор» в таблице пока нет — нужно обновить выгрузку из AutoCRM."></div></div>
     </div>
     
@@ -1306,7 +1306,7 @@ dash.calc('slots', {
   const samSpend = (crm, meta, spend) => { const p = dash.params(), w = H.win(crm); if (!w) return 0; return H.sum(H.spendRows(meta, spend).filter((r) => H.inR(r.date, w.from, w.to) && H.okModel(r.model, p) && H.okCh(r.channel, p)), (r) => r.spend); };
 
   dash.calc('fun_dist', { inputs: ['crm', 'leads_crm'], title: 'Воронка Hyundai Uzbekistan', description: 'Лиды и рабочие листы AutoCRM с источником «дистрибьютор». Фильтр модели учитывается, канала — нет.',
-    fn: (crm, lc) => { const rl = distRl(crm), l = distLeads(crm, lc); return rl.length || l ? H.funnel(rl, l ? l.leads : null, l ? l.taken : null, 0) : []; } });
+    fn: (crm, lc) => { const rl = distRl(crm), l = distLeads(crm, lc); if (!rl.length && !l) return []; const tk = rl.filter((r) => r.taken_at).length; /* часть РЛ дистрибьютора заведена без лида — лиды не меньше РЛ */ return H.funnel(rl, Math.max(l ? l.leads : 0, rl.length), Math.max(l ? l.taken : 0, tk), 0); } });
   dash.calc('proc_dist', { inputs: ['crm'], title: 'Обработка — дистрибьютор', description: 'Время до взятия (рабочие часы 9:00–20:00), не взятые, отказы, результат по РЛ дистрибьютора.',
     fn: (crm) => [H.procOf(distRl(crm))] });
   dash.calc('models_dist', { inputs: ['crm'], title: 'Модели — дистрибьютор', description: 'Рабочие листы дистрибьютора по модели.',
